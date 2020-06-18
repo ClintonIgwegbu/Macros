@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/food_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/card_half_spacing"
+    android:layout_marginBottom="@dimen/card_half_spacing"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/card_padding">
+
+        <TableRow
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/food_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Food item" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/lbl_protein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/protein" />
+            <EditText
+                android:id="@+id/grams_protein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/lbl_carbs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carbs" />
+            <EditText
+                android:id="@+id/grams_carbs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/lbl_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fat" />
+            <EditText
+                android:id="@+id/grams_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0" />
+        </TableRow>
+
+
+    </TableLayout>
+
+
+</androidx.cardview.widget.CardView>

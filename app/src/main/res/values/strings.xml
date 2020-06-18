@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Meals</string>
+    <string name="title_history">History</string>
+    <string name="title_meals">Meals</string>
+    <string name="_0">0</string>
+    <string name="protein">protein</string>
+    <string name="carbs">carbs</string>
+    <string name="fat">fat</string>
+</resources>
