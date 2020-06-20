@@ -32,6 +32,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'  // Chart dependencies
     implementation 'com.loopeer.library:cardstack:1.0.2'  // Card stack dependencies
+    implementation 'com.cocosw:bottomsheet:1.+@aar'  // Bottom sheet dependency
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

@@ -2,13 +2,19 @@ package com.nile.macros;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.CancellationSignal;
+import android.text.Layout;
+import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +54,7 @@ public class FoodProvider extends ContentProvider {
     // The database itself
     SQLiteDatabase db;
 
+    // Called when the app is started up
     @Override
     public boolean onCreate() {
         // Grab a connection to our database
@@ -77,14 +84,112 @@ public class FoodProvider extends ContentProvider {
         }
     }
 
+    // CRUD database operations
     // Create
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        // Database returns id of new row when you insert sth into it -
+        // Therefore it doesn't make sense to allow you to specify a key during insertion
+        if (values.containsKey(COLUMN_FOODID))
+            throw new UnsupportedOperationException();
+
+        // Insert entry into database and return its id
+        long id = db.insertOrThrow(DATABASE_TABLE, null, values);
+
+        // The context acts as a way to pass background information to a new component
+        // We have just inserted a new item into the table, so we notify any listeners of change
+        // Recall that one of main responsibilities of a ContentProvider is to notify listeners of
+        // changes to the data.
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // return the uri of the newly added task
+        return ContentUris.withAppendedId(uri, id);
     }
 
-    // A helper class which knows how to create and update the database;
+    // Update
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
+        if (values.containsKey(COLUMN_FOODID))
+            throw new UnsupportedOperationException();
+
+        // Update the database and return the number of entries that were updated
+        int count = db.update(
+                DATABASE_TABLE,
+                values,
+                COLUMN_FOODID + "=?",
+                new String[]{Long.toString(ContentUris.parseId(uri))}
+        );
+
+        // Notify listeners that the database has been changed
+        if (count > 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the number of entries that have been updated
+        return count;
+    }
+
+    // Delete
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        // Delete entries from the database and return count of entries that were deleted
+        int count = db.delete(
+                DATABASE_TABLE,
+                COLUMN_FOODID + "=?",
+                new String[]{Long.toString(ContentUris.parseId(uri))}
+        );
+
+        // Notify any listeners of changes to the database
+        if (count > 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return count of deleted entries
+        return count;
+    }
+
+    // Read
+    @Nullable
+    @Override
+    public Cursor query(@NonNull Uri uri, @Nullable String[] ignored1, @Nullable String selection,
+                        @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        String[] projection = new String[]{
+                COLUMN_FOODID,
+                COLUMN_PROTEIN,
+                COLUMN_CARBS,
+                COLUMN_FAT
+        };
+
+        Cursor c;
+        switch (URI_MATCHER.match(uri)) {
+
+            case LIST_FOOD:
+                c = db.query(DATABASE_TABLE,
+                        projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                break;
+
+            case ITEM_FOOD:
+                c = db.query(DATABASE_TABLE, projection,
+                        COLUMN_FOODID + "=?",
+                        new String[]{Long.toString(ContentUris.parseId(uri))},
+                        null, null, null, null);
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
+
+        }
+        c.setNotificationUri(getContext().getContentResolver(), uri);
+        return c;
+    }
+
+    // A helper class which knows how to create and upgrade the database;
+    // onCreate is called when the app is installed
+    // onUpgrade is called when the database version is upgraded (with an app upgrade)
     protected static class DatabaseHelper extends SQLiteOpenHelper {
 
         static final String DATABASE_CREATE =
@@ -105,6 +210,9 @@ public class FoodProvider extends ContentProvider {
             db.execSQL(DATABASE_CREATE);  // execute SQL command
         }
 
+        // Upgrades the database using SQL ALTER statements
+        // This is done instead of deleting the old database and making the knew one so as to
+        // retain user information between database (and hence app) upgrades
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             throw new UnsupportedOperationException();

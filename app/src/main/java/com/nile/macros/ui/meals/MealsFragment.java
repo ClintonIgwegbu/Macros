@@ -1,35 +1,23 @@
 package com.nile.macros.ui.meals;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.StackView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.nile.macros.R;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MealsFragment extends Fragment {
 
@@ -37,14 +25,22 @@ public class MealsFragment extends Fragment {
 
     RecyclerView recyclerView;
     MealListAdapter adapter;
-//    StackAdapter adapter;
-
-    StackView stackView;
+    public static BottomSheet.Builder thing;  // don't really know what I'm doing with this
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new MealListAdapter();
+        thing = new BottomSheet.Builder(getActivity()).title("title").sheet(R.menu.card_menu).listener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case R.id.thing:
+                        // do something
+                        break;
+                }
+            }
+        });
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,25 +57,11 @@ public class MealsFragment extends Fragment {
 //            }
 //        });
 
-//        HorizontalBarChart chart = root.findViewById(R.id.bar_chart);
-//
-//        List<BarEntry> entries = new ArrayList<BarEntry>();
-//        entries.add(new BarEntry(0f, 20f));
-//        entries.add(new BarEntry(1f, 40f));
-//
-//        BarDataSet dataSet = new BarDataSet(entries, "Macros");
-//        BarData data = new BarData(dataSet);
-//        chart.setData(data);
-//        chart.setFitBars(true);
-
         // Recycler view
         recyclerView = root.findViewById(R.id.recycler);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-//        stackView = root.findViewById(R.id.stack);
-//        stackView.setAdapter(adapter);
 
         return root;
     }

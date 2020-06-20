@@ -9,62 +9,83 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/card_corner_radius">
 
-    <TableLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/card_padding">
+        android:layout_height="wrap_content">
 
-        <TableRow
+
+        <EditText
+            android:id="@+id/food_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Food name"/>
+
+        <ImageView
+            android:id="@+id/btn_show_menu"
             android:clickable="true"
-            android:focusable="true">
-            <TextView
-                android:id="@+id/food_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Food item" />
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:id="@+id/lbl_protein"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/protein" />
-            <EditText
-                android:id="@+id/grams_protein"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_0" />
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:id="@+id/lbl_carbs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/carbs" />
-            <EditText
-                android:id="@+id/grams_carbs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_0" />
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:id="@+id/lbl_fat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fat" />
-            <EditText
-                android:id="@+id/grams_fat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_0" />
-        </TableRow>
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/card_padding"
+            android:contentDescription="More"
+            android:src="@android:drawable/ic_menu_more" />
 
 
-    </TableLayout>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_padding"
+            android:layout_marginTop="30dp"
+            android:layout_alignTop="@+id/food_name">
 
+            <TableRow
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/lbl_protein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/protein" />
+                <EditText
+                    android:id="@+id/grams_protein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@string/_0" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/lbl_carbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/carbs" />
+                <EditText
+                    android:id="@+id/grams_carbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@string/_0" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/lbl_fat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fat" />
+                <EditText
+                    android:id="@+id/grams_fat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@string/_0" />
+            </TableRow>
+
+
+        </TableLayout>
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
